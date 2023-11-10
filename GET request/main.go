@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -11,7 +12,8 @@ func main() {
 	fmt.Println("This is the getrequest")
 
 	// performGET()
-	performPost()
+	// performPost()
+	performFormPost()
 
 }
 
@@ -66,5 +68,32 @@ func performPost() {
 	}
 
 	fmt.Println(string(content))
+
+}
+
+func performFormPost() {
+	const myurl = "http://localhost:8000/postform"
+
+	// formdata
+
+	data := url.Values{}
+	data.Add("Firstname", "Guruprasad")
+	data.Add("Lastname", "Bhagat")
+	data.Add("age", "18")
+	data.Add("Profession", "Android Developer")
+
+	response, err := http.PostForm(myurl, data)
+	if err != nil {
+		panic(err)
+	}
+
+	content, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	defer response.Body.Close()
+
+	fmt.Println("The resposne is :  ", string(content))
 
 }
